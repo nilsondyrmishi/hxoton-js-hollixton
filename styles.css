@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  display: grid;
+  height: 120vh;
+  grid-template-rows: 80px 1fr 80px;
+  font-weight: 200;
+  line-height: 1.6rem;
+}
+img{
+  width: 100%;
+}
+
+
