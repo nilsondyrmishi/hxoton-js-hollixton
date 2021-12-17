@@ -4,7 +4,9 @@ const state = {
   pages: ['home', 'Girls', 'Guys', 'Sale'],
   pageSelected: '',
   modal: '',
-  selectedProduct: null
+  selectedProduct: null,
+  search: ''
+
 }
 
 
@@ -28,7 +30,7 @@ function getGirlsProd() {
 }
 
 function getSaleProd() {
-  return state.store
+  return state.store.filter(item => item.priceDiscounted)
 
 }
 
@@ -54,7 +56,7 @@ function renderHeader() {
   const h1El = document.createElement('h1')
   h1El.textContent = 'Hollixton'
   h1El.addEventListener('click', function () {
-    state.selectedPage = 'home'
+    state.pageSelected = 'home'
     state.selectedProduct = null
     render()
   })
@@ -69,7 +71,7 @@ function renderHeader() {
   girlsListEl.setAttribute('class', 'list_item_header')
   const anchorGirlsLi = document.createElement('a')
   anchorGirlsLi.addEventListener('click', function data() {
-    state.selectedPage = 'Girls'
+    state.pageSelected = 'Girls'
     state.selectedProduct = null
     render()
   })
@@ -117,27 +119,26 @@ function renderHeader() {
   const searchList = document.createElement('li')
   searchList.setAttribute('class', 'list_item_header_right')
 
-  const searchbutton = document.createElement('button')
+  const searchButton = document.createElement('button')
   const searchImage = document.createElement('img')
   searchImage.setAttribute('src', './assets/search.svg')
-  searchbutton.addEventListener('click', function buttons() {
+  searchButton.addEventListener('click', function buttons() {
     state.modal = 'search'
-    renderSrchButton(searchbutton)
+    renderSrchButton(searchButton)
   })
-  searchbutton.append(searchImage)
-  searchImage.append(searchbutton)
+  searchButton.append(searchImage)
 
   const loginList = document.createElement('li')
   loginList.setAttribute('class', 'list_item_header_right')
   const loginButton = document.createElement('button')
-  const loginimage = document.createElement('img')
-  loginimage.setAttribute('src', './assets/login_person.svg')
+  const loginImage = document.createElement('img')
+  loginImage.setAttribute('src', './assets/login_person.svg')
   loginList.addEventListener('click', function buttons() {
     state.modal = 'login'
     renderLoginButton(loginButton)
   })
 
-  loginButton.append(loginimage)
+  loginButton.append(loginImage)
   loginList.append(loginButton)
 
   const cartList = document.createElement('li')
@@ -160,18 +161,167 @@ function renderHeader() {
 }
 
 function renderSrchButton() {
+const buttonSrchWrapper = document.createElement('div')
+  buttonSrchWrapper.setAttribute('class','btn_search_wrapper')
+  buttonSrchWrapper.addEventListener('click',function (){
+    state.modal=''
+    render()
+  })
+
+  const wrapperButton = document.createElement('div')
+  wrapperButton.setAttribute('class','wrapper_button')
+  wrapperButton.addEventListener('click',function (event){
+    event.stopPropagation()
+  })
+
+  const modalClosed = document.createElement('button')
+  modalClosed.setAttribute('class','btn_closed_modal')
+  modalClosed.textContent = 'X'
+  modalClosed.addEventListener('click',function button (){
+    state.modal = ''
+    render()
+  })
+
+  const buttonForm = document.createElement('form')
+  buttonForm.setAttribute('class','form_search_button')
+  buttonForm.addEventListener('submit',function (event){
+    event.preventDefault()
+    state.search = buttonForm.search.value
+    render()
+  })
+
+  const buttonLabel = document.createElement('label')
+  buttonLabel.setAttribute('class','search_btn_input')
+
+  const inputButton = document.createElement('input')
+  inputButton.setAttribute('class','search_btn_input')
+  inputButton.setAttribute('type','text')
+  inputButton.setAttribute('name','search')
+
+  buttonLabel.append(inputButton)
+  buttonForm.append(buttonLabel)
 
 
+  const btnTitle = document.createElement('h2')
+  btnTitle.textContent ='search items'
+
+  wrapperButton.append(modalClosed,buttonForm,btnTitle)
+  buttonSrchWrapper.append(wrapperButton)
+  document.body.append(buttonSrchWrapper)
 }
 
 function renderLoginButton() {
+
+  const buttonSrchWrapper = document.createElement('div')
+  buttonSrchWrapper.setAttribute('class','btn_search_wrapper')
+  buttonSrchWrapper.addEventListener('click',function (){
+    state.modal=''
+    render()
+  })
+
+
+  const wrapperButton = document.createElement('div')
+  wrapperButton.setAttribute('class','wrapper_button')
+  wrapperButton.addEventListener('click',function (event){
+    event.stopPropagation()
+  })
+
+  const modalClosed = document.createElement('button')
+  modalClosed.setAttribute('class','btn_closed_modal')
+  modalClosed.textContent = 'X'
+  modalClosed.addEventListener('click',function button (){
+    state.modal = ''
+    render()
+  })
+const signIn = document.createElement('form')
+  signIn.setAttribute('class','signin_form')
+  signIn.addEventListener('submit',function (event){
+    event.preventDefault()
+    userLogIn(inputEmail,labelPassword)
+  })
+  const labelEmail = document.createElement('label')
+  labelEmail.setAttribute('name','emailinput')
+  const pEl = document.createElement('p')
+  pEl.textContent = 'Email'
+
+  const inputEmail = document.createElement('input')
+  inputEmail.setAttribute('class','email_input')
+  inputEmail.setAttribute('type','email')
+  inputEmail.setAttribute('name','emailinput')
+
+  labelEmail.append(pEl,inputEmail)
+
+  const labelPassword = document.createElement('label')
+  labelEmail.setAttribute('name','passbutton')
+  const p2El = document.createElement('p')
+  p2El.textContent = 'Password'
+
+  const inputPassword = document.createElement('input')
+  inputPassword.setAttribute('class','input_password')
+  inputPassword.setAttribute('type','password')
+  inputPassword.setAttribute('name','passbutton')
+
+  labelPassword.append(p2El,inputPassword)
+
+
+  const btnSignInLabel = document.createElement('label')
+  const btnSign = document.createElement('button')
+  btnSign.textContent = 'SIGN IN'
+  btnSign.setAttribute('class','button_signin')
+
+  btnSignInLabel.append(btnSign)
+
+  const btnTitle = document.createElement('h2')
+  btnTitle.textContent = 'login'
+
+  signIn.append(labelPassword,labelEmail,btnSignInLabel)
+
+  wrapperButton.append(modalClosed,btnTitle,signIn)
+  buttonSrchWrapper.append(wrapperButton)
+  document.body.append(buttonSrchWrapper)
+
 }
 
 function renderCartButton() {
 
+  const buttonSrchWrapper = document.createElement('div')
+  buttonSrchWrapper.setAttribute('class','btn_search_wrapper')
+  buttonSrchWrapper.addEventListener('click',function (){
+    state.modal=''
+    render()
+  })
+
+
+  const wrapperButton = document.createElement('div')
+  wrapperButton.setAttribute('class','wrapper_button')
+  wrapperButton.addEventListener('click',function (event){
+    event.stopPropagation()
+  })
+
+  const modalClosed = document.createElement('button')
+  modalClosed.setAttribute('class','btn_closed_modal')
+  modalClosed.textContent = 'X'
+  modalClosed.addEventListener('click',function button (){
+    state.modal = ''
+    render()
+  })
+
+
+  const btnTitle = document.createElement('h2')
+  btnTitle.textContent = 'cart'
+
+  wrapperButton.append(modalClosed,btnTitle)
+  buttonSrchWrapper.append(wrapperButton)
+  document.body.append(buttonSrchWrapper)
+
+
 }
 
 function renderButtons() {
+  if (state.modal === '') return
+  if (state.modal === 'search') renderSrchButton()
+  if (state.modal === 'login') renderLoginButton()
+  if (state.modal === 'cart') renderCartButton()
 
 }
 
@@ -191,7 +341,15 @@ function renderMain() {
 }
 
 function renderFooter() {
+const footer = document.createElement('footer')
 
+  const footerH2 = document.createElement('h2')
+  footerH2.textContent = 'HOLLIXTON'
+  const leftH2Footer = document.createElement('h2')
+  leftH2Footer.textContent = 'United Kingdom'
+
+  footer.append(footerH2,leftH2Footer)
+  document.body.append(footer)
 }
 
 function render() {
@@ -206,6 +364,10 @@ function render() {
 
 function init() {
 
+    getUsers().then(users =>state.users=users)
+    getItems().then(items =>state.store = items)
+
+    render()
 }
 
 init()
